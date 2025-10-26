@@ -120,3 +120,5 @@ Thumbs.db
 
 # Python virtual environments
 venv/ 
+
+.vercel/
