@@ -1,58 +1,144 @@
-# Event Watcher
+# HardstyleEvents
 
-This script monitors the [19hz.info Bay Area event listing](https://19hz.info/eventlisting_BayArea.php) for upcoming hardstyle, hardcore, and hard dance events, and sends an email notification if any are found within the next week.
+A multi-location email subscription service for genre-based event notifications.
 
 ## Features
-- Scrapes the event listing page for new events.
-- Filters events by keywords ("hardstyle", "hardcore").
-- Only includes events happening within the next 7 days.
-- Sends a formatted email with event details using the [Resend](https://resend.dev/) email API.
-- Supports a `--dry-run` mode to preview the email without sending.
 
-## Requirements
-- Python 3.7+
-- The following Python packages:
-  - `requests`
-  - `beautifulsoup4`
-  - `python-dotenv`
-  - `resend`
+- 🎵 Weekly email digests for hardstyle/hardcore events
+- 📍 Multi-location support (18+ cities across North America)
+- 🔒 Secure unsubscribe with HMAC-SHA256 tokens
+- 📧 Batch email sending via Resend
+- 🎨 Modern, responsive UI with Next.js and Tailwind CSS
+- 🗄️ PostgreSQL database via Supabase
 
-Install dependencies with:
+## Tech Stack
+
+## Getting Started
+
+### Prerequisites
+
+
+- Node.js 18+ and npm
+- Supabase account
+- Resend account
+- Vercel account (for deployment)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-pip install -r requirements.txt
+git clone <repository-url>
+cd event_watcher
 ```
 
-## Setup
-1. **Clone this repository** and navigate to the project directory.
-2. **Create a `.env` file** in the project root with the following variables:
-    ```env
-    EMAIL_USER=onboarding@resend.dev
-    EMAIL_TO=recipient@example.com
-    RESEND_API_KEY=your_resend_api_key
-    ```
-   - `EMAIL_USER` must be a sender email verified with Resend.
-   - `EMAIL_TO` is the recipient's email address.
-   - `RESEND_API_KEY` is your Resend API key.
-
-3. **(Optional) Edit keywords**
-   - By default, the script looks for "hardstyle" and "hardcore" events. You can change the `keywords` list in `watch_events.py` if needed.
-
-## Usage
-
-### Dry Run (Preview Email)
-To see what would be sent, without actually sending an email:
+2. Install dependencies:
 ```bash
-python3 watch_events.py --dry-run
+npm install
 ```
 
-### Send Email
-To run the script and send an email if matching events are found:
-```bash
-python3 watch_events.py
+3. Set up environment variables:
+Create a `.env.local` file with:
+```
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_supabase_service_key
+RESEND_API_KEY=your_resend_api_key
+HMAC_SECRET=your_random_secret_key
+DOMAIN=hardstyleevents.com
+EMAIL_USER=notifications@hardstyleevents.com
 ```
 
-## Scheduling
-To run this script automatically (e.g., daily), set up a cron job or use another scheduler.
+4. Initialize the database:
+Run the SQL script in `supabase-schema.sql` in your Supabase SQL editor.
+
+5. Run the development server:
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see the landing page.
+
+## Database Schema
+
+The application uses four main tables:
+
+- **users:** Email addresses and user metadata
+- **categories:** Event categories (currently "hardstyle")
+- **locations:** Geographic locations with event URLs
+- **subscriptions:** User subscriptions with many-to-many relationships
+
+See `supabase-schema.sql` for the complete schema.
+
+## API Endpoints
+
+### POST /api/subscribe
+Subscribe a user to event notifications for a specific location.
+
+**Body:**
+```json
+{
+  "email": "user@example.com",
+  "location": "San Francisco Bay Area / Northern California"
+}
+```
+
+### POST /api/unsubscribe/:token.:sig
+Unsubscribe endpoint with HMAC signature verification.
+
+### GET /unsubscribe?token=...&sig=...
+Human-facing unsubscribe confirmation page.
+
+### POST /api/cron/send-weekly
+Weekly cron job that sends batch emails. Protected by Vercel Cron Secret.
+
+## Deployment
+
+### Vercel
+
+1. Push code to GitHub
+2. Import project in Vercel
+3. Set environment variables in Vercel dashboard
+4. Deploy!
+
+The cron job will automatically run every Monday at 8:00 AM (configured in `vercel.json`).
+
+### Environment Variables in Vercel
+
+Add these as Vercel environment variables:
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_KEY`
+- `RESEND_API_KEY`
+- `HMAC_SECRET`
+- `DOMAIN`
+- `EMAIL_USER`
+
+## Project Structure
+
+```
+/app
+  /page.tsx                      - Landing page
+  /unsubscribe/page.tsx          - Unsubscribe page
+  /api
+    /subscribe/route.ts          - Subscription endpoint
+    /unsubscribe/[slug]/route.ts - Unsubscribe API
+    /cron/send-weekly/route.ts   - Weekly email cron
+/lib
+  /crypto.ts                     - HMAC utilities
+  /supabase.ts                   - Supabase client
+  /types.ts                      - TypeScript types
+  /locations.ts                  - Location mappings
+  /email.ts                      - Email templates
+  /scraper.ts                    - Event scraping
+```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or PR.
 
 ## License
-MIT 
+
+MIT
+
+## Acknowledgments
+
+- Event data sourced from 19hz.info
+- Built with [Next.js](https://nextjs.org), [Supabase](https://supabase.com), and [Resend](https://resend.com)
