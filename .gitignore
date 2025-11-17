@@ -1,124 +1,46 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# C extensions
-*.so
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+# testing
+/coverage
 
-# PyInstaller
-*.manifest
-*.spec
+# next.js
+/.next/
+/out/
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+# production
+/build
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-build/
-temp/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-Pipfile.lock
-
-# poetry
-poetry.lock
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# VS Code settings
-.vscode/
-
-# Environment variables
-.env
-.env.*
-
-# macOS
+# misc
 .DS_Store
+*.pem
 
-# Windows
-Thumbs.db 
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Python virtual environments
-venv/ 
+# local env files
+.env*.local
+.env
 
-.vercel/
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# python (legacy)
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+DEPLOYMENT.md
